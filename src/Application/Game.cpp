@@ -59,6 +59,7 @@
 #include "GUI/UI/UICharacter.h"
 #include "GUI/UI/UIDialogue.h"
 #include "GUI/UI/UIBranchlessDialogue.h"
+#include "GUI/UI/UIAIDialogue.h"
 #include "GUI/UI/UIGame.h"
 #include "GUI/UI/UIHouses.h"
 #include "GUI/UI/UIMainMenu.h"
@@ -203,11 +204,20 @@ bool Game::loop() {
 
 GraphicsImage *gamma_preview_image = nullptr;  // 506E40
 
+void startAIDialogue(int npcId, bool isSecondGreet, Actor *actor) {
+    pGUIWindow_CurrentMenu = new GUIWindow_AIDialogue(npcId);
+}
+
 void Game_StartDialogue(int actor_id) {
     if (pParty->hasActiveCharacter()) {
         engine->_messageQueue->clear();
 
-        initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
+        NPCData* npcData = getNPCData(pActors[actor_id].npcId);
+        if (npcData && npcData->isAIControlled) {
+            startAIDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
+        } else {
+            initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
+        }
     }
 }
 

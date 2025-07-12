@@ -9,6 +9,7 @@ set(GUI_UI_SOURCES
         UIChest.cpp
         UICredits.cpp
         UIDialogue.cpp
+        UIAIDialogue.cpp
         UIBranchlessDialogue.cpp
         UIGame.cpp
         UIGameOver.cpp
@@ -34,6 +35,7 @@ set(GUI_UI_HEADERS
         UIChest.h
         UICredits.h
         UIDialogue.h
+        UIAIDialogue.h
         UIBranchlessDialogue.h
         UIGame.h
         UIGameOver.h

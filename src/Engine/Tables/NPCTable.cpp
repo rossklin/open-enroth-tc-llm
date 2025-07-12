@@ -187,6 +187,9 @@ void NPCStats::InitializeNPCData(const Blob &npcData) {
                     case 1:
                         pNPCUnicNames[i] = removeQuotes(test_string);
                         pOriginalNPCData[i + 1].name = pNPCUnicNames[i];
+                        if (pOriginalNPCData[i + 1].name == "Calvin the Fool") {
+                            pOriginalNPCData[i + 1].isAIControlled = true;
+                        }
                         break;
                     case 2:
                         pOriginalNPCData[i + 1].uPortraitID = atoi(test_string);
