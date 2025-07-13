@@ -56,7 +56,6 @@ struct NPCData {  // 4Ch
     CharacterSex uSex = SEX_MALE;       // 40
     int bHasUsedTheAbility = 0;  // 44
     int news_topic = 0;          // 48
-    bool isAIControlled = false;
 };
 
 struct NPCSacrificeStatus {

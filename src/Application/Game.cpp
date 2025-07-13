@@ -211,13 +211,8 @@ void startAIDialogue(int npcId, bool isSecondGreet, Actor *actor) {
 void Game_StartDialogue(int actor_id) {
     if (pParty->hasActiveCharacter()) {
         engine->_messageQueue->clear();
-
-        NPCData* npcData = getNPCData(pActors[actor_id].npcId);
-        if (npcData && npcData->isAIControlled) {
-            startAIDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
-        } else {
-            initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
-        }
+        // TODO maybe start AI dialogue here?
+        initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
     }
 }
 
