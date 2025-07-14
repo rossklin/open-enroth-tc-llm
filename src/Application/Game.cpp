@@ -204,15 +204,13 @@ bool Game::loop() {
 
 GraphicsImage *gamma_preview_image = nullptr;  // 506E40
 
-void startAIDialogue(int npcId, bool isSecondGreet, Actor *actor) {
-    pGUIWindow_CurrentMenu = new GUIWindow_AIDialogue(npcId);
-}
-
 void Game_StartDialogue(int actor_id) {
     if (pParty->hasActiveCharacter()) {
         engine->_messageQueue->clear();
-        // TODO maybe start AI dialogue here?
-        initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
+        // initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
+
+        // Debug: test the new dialogue structure
+        initializeAIControlledDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
     }
 }
 
