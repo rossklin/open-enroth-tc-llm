@@ -63,8 +63,6 @@ GUIWindow_AIDialogue::GUIWindow_AIDialogue() : GUIWindow(WINDOW_Dialogue, {0, 0}
 }
 
 void GUIWindow_AIDialogue::Update() {
-    static int last_length = 0;
-
     render->DrawTextureNew(477 / 640.0f, 0, game_ui_dialogue_background);
     render->DrawTextureNew(468 / 640.0f, 0, game_ui_right_panel_frame);
     render->DrawTextureNew((pNPCPortraits_x[0][0] - 4) / 640.0f, (pNPCPortraits_y[0][0] - 4) / 480.0f, game_ui_evtnpc);
@@ -79,26 +77,12 @@ void GUIWindow_AIDialogue::Update() {
         y += assets->pFontArrus->GetHeight();
     }
 
-    std::string rawInput = keyboardInputHandler->GetTextInput();
-    std::string currentInput = "You: " + rawInput;
-    // Don't draw the newline character itself
-    if (!rawInput.empty() && rawInput.back() == '\n') {
-        currentInput.pop_back();
-    }
+    std::string currentInput = "You: " + keyboardInputHandler->GetTextInput();
     DrawText(assets->pFontArrus.get(), {13, y}, colorTable.Yellow, currentInput);
 
-    // Debug
-    // Works as expected until I press enter, then no new input recieved (update still runs)
-    if (rawInput.length() != last_length)  {
-        std::cout << "New string: '" << rawInput << "'" << std::endl;
-        std::cout << "Last char: " << (int)rawInput.back() << std::endl;
-        last_length = rawInput.length();
-    }
-
-    if (!rawInput.empty() && rawInput.back() == '\n') {
-        std::string playerInput = rawInput.substr(0, rawInput.length() - 1);
-        keyboardInputHandler->SetTextInput("");
-
+    if (this->keyboard_input_status == WindowInputStatus::WINDOW_INPUT_CONFIRMED) {
+        std::string playerInput = keyboardInputHandler->GetTextInput();
+        
         if (ascii::noCaseEquals(playerInput, "exit")) {
             engine->_messageQueue->addMessageCurrentFrame(UIMSG_Escape, 1, 0);
             return;
@@ -106,6 +90,11 @@ void GUIWindow_AIDialogue::Update() {
 
         conversationLog.push_back("You: " + playerInput);
         conversationLog.push_back("NPC: OK");
+        
+        keyboardInputHandler->SetTextInput("");
+        keyboardInputHandler->StartTextInput(Io::TextInputType::Text, 256, this);
+    } else if (this->keyboard_input_status == WindowInputStatus::WINDOW_INPUT_CANCELLED) {
+        engine->_messageQueue->addMessageCurrentFrame(UIMSG_Escape, 1, 0);
     }
 }
 
