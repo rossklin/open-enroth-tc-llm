@@ -89,7 +89,13 @@ void GUIWindow_AIDialogue::Update() {
         }
 
         conversationLog.push_back("You: " + playerInput);
-        conversationLog.push_back("NPC: OK");
+
+        if (ascii::noCaseEquals(playerInput, "gold")) {
+            pParty->AddGold(100);
+            conversationLog.push_back("NPC: Here is 100 gold.");
+        } else {
+            conversationLog.push_back("NPC: OK");
+        }
         
         keyboardInputHandler->SetTextInput("");
         keyboardInputHandler->StartTextInput(Io::TextInputType::Text, 256, this);
