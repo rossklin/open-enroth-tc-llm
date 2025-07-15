@@ -21,6 +21,9 @@
 #include "GUI/UI/UIDialogue.h"
 #include <iostream>
 
+#include "Scripting/ScriptingSystem.h"
+#include "Engine/EngineGlobals.h"
+
 Actor *currentSpeakingAI = nullptr;
 
 void initializeAIControlledDialogue(int npcId, int bPlayerSaysHello, Actor *actor) {
@@ -90,10 +93,11 @@ void GUIWindow_AIDialogue::Update() {
 
         conversationLog.push_back("You: " + playerInput);
 
-        if (ascii::noCaseEquals(playerInput, "gold")) {
-            pParty->AddGold(100);
-            conversationLog.push_back("NPC: Here is 100 gold.");
+        if (ascii::noCaseEquals(playerInput, "give quest")) {
+            scriptingSystem->executeString("local game = require('bindings.game'); game.party.setQBit(18, true)");
+            conversationLog.push_back("NPC: Quest given.");
         } else {
+            scriptingSystem->executeString(playerInput);
             conversationLog.push_back("NPC: OK");
         }
         

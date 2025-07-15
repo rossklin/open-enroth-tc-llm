@@ -6,6 +6,7 @@
 #include "Library/Platform/Interface/PlatformEventLoop.h"
 
 class PlatformApplication;
+class ScriptingSystem;
 
 namespace detail {
 void globalProcessMessages();
@@ -23,6 +24,7 @@ extern PlatformOpenGLContext *openGLContext;
 
 // TODO(captainurist): this global should go, together with this header file.
 extern PlatformApplication *application;
+extern ScriptingSystem *scriptingSystem;
 
 #define MessageLoopWithWait() {                                                                                         \
     detail::globalProcessMessages();                                                                                    \

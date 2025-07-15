@@ -185,9 +185,11 @@ void GameStarter::initialize() {
     _scriptingSystem->addBindings<AudioBindings>("audio");
     _scriptingSystem->addBindings<RendererBindings>("renderer");
     _scriptingSystem->executeEntryPoint();
+    ::scriptingSystem = _scriptingSystem.get();
 }
 
 GameStarter::~GameStarter() {
+    ::scriptingSystem = nullptr;
     _application->removeComponent<EngineControlComponent>(); // Join the control thread first.
 
     _game.reset();

@@ -42,6 +42,16 @@ void ScriptingSystem::executeEntryPoint() {
     _solState->script(dfs->read(fmt::format("{}/{}", _scriptFolder, _entryPointFile)).string_view());
 }
 
+void ScriptingSystem::executeString(std::string_view command) {
+    executeStringWithResult(command);
+}
+
+sol::protected_function_result ScriptingSystem::executeStringWithResult(std::string_view command) {
+    return _solState->script(command, [](lua_State*, sol::protected_function_result pfr) {
+        return pfr;
+    });
+}
+
 void ScriptingSystem::_initBaseLibraries() {
     _solState->open_libraries(
         sol::lib::base,

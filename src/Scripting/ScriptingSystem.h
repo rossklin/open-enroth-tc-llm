@@ -23,6 +23,8 @@ class ScriptingSystem {
     ~ScriptingSystem();
 
     void executeEntryPoint();
+    void executeString(std::string_view command);
+    sol::protected_function_result executeStringWithResult(std::string_view command);
 
     template<typename TBindings, typename ...TArgs>
     void addBindings(std::string_view bindingTableName, TArgs &&... args) {

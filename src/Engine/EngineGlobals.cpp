@@ -8,6 +8,7 @@ PlatformOpenGLContext *openGLContext = nullptr;
 PlatformEventLoop *eventLoop = nullptr;
 PlatformEventHandler *eventHandler = nullptr;
 PlatformApplication *application = nullptr;
+ScriptingSystem *scriptingSystem = nullptr;
 
 
 void detail::globalProcessMessages() {
