@@ -59,7 +59,6 @@
 #include "GUI/UI/UICharacter.h"
 #include "GUI/UI/UIDialogue.h"
 #include "GUI/UI/UIBranchlessDialogue.h"
-#include "GUI/UI/UIAIDialogue.h"
 #include "GUI/UI/UIGame.h"
 #include "GUI/UI/UIHouses.h"
 #include "GUI/UI/UIMainMenu.h"
@@ -207,10 +206,10 @@ GraphicsImage *gamma_preview_image = nullptr;  // 506E40
 void Game_StartDialogue(int actor_id) {
     if (pParty->hasActiveCharacter()) {
         engine->_messageQueue->clear();
-        // initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
+        initializeNPCDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
 
         // Debug: test the new dialogue structure
-        initializeAIControlledDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
+        // initializeAIControlledDialogue(pActors[actor_id].npcId, true, &pActors[actor_id]);
     }
 }
 
