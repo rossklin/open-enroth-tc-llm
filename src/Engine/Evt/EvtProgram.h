@@ -62,6 +62,12 @@ class EvtProgram {
     void dumpAll() const;
     void dump(int eventId) const;
 
+    /**
+     * @param opcode opcode to filter for
+     * @return vector of pairs of event id and instruction where the opcode matches the filter
+     */
+    std::vector<std::pair<int, EvtInstruction>> getEventMap(EvtOpcode opcode) const;
+
  private:
     std::unordered_map<int, std::vector<EvtInstruction>> _eventsById;
 };

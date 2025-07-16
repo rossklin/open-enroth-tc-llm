@@ -127,6 +127,21 @@ void EvtProgram::dump(int eventId) const {
     }
 }
 
+std::vector<std::pair<int, EvtInstruction>> EvtProgram::getEventMap(EvtOpcode opcode) const
+{
+    std::vector<std::pair<int, EvtInstruction>> res;
+    
+    for (const auto &[id, events] : _eventsById) {
+        for (const EvtInstruction &event : events) {
+            if (event.opcode == opcode) {
+                res.push_back({id, event});
+            }
+        }
+    }
+
+    return res;
+}
+
 void EvtProgram::dumpAll() const {
     for (const auto &[id, _] : _eventsById) {
         dump(id);

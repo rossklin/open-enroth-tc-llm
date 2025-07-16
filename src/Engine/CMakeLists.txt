@@ -86,7 +86,8 @@ target_link_libraries(engine
         library_filesystem_lowercase
         library_filesystem_proxy
         resources
-        utility)
+        utility
+        llm)
 
 target_compile_definitions(engine PRIVATE
         PROJECT_VERSION="${PROJECT_VERSION}"
