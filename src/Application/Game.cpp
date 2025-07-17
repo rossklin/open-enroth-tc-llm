@@ -87,6 +87,8 @@
 #include "GameMenu.h"
 #include "GameStates/GameFsmBuilder.h"
 
+#include "LLM/compileLLMContext.h"
+
 Game::Game(PlatformApplication *application, std::shared_ptr<GameConfig> config) {
     _application = application;
     _config = config;
@@ -1616,6 +1618,9 @@ void Game::gameLoop() {
     GameUI_LoadPlayerPortraitsAndVoices();
     pIcons_LOD->reserveLoadedTextures();
     // pAudioPlayer->SetMusicVolume(engine->config->music_level);
+
+    // Debug
+    compileLLMContext();
 
     while (true) {
         engine->_messageQueue->clear();

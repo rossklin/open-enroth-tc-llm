@@ -87,8 +87,6 @@
 #include "Utility/String/Transformations.h"
 #include "TurnEngine/TurnEngine.h"
 
-#include "LLM/compileLLMContext.h"
-
 /*
 
 static bool b = false;
@@ -600,9 +598,6 @@ void DoPrepareWorld(bool bLoading, int _1_fullscreen_loading_2_box) {
         for (Actor& actor : pActors)
             if (actor.monsterInfo.spell2Id == SPELL_SPIRIT_SPIRIT_LASH)
                 actor.monsterInfo.spell2Id = SPELL_SPIRIT_BLESS;
-
-    // Debug
-    compileLLMContext();
 
     bDialogueUI_InitializeActor_NPC_ID = 0;
     engine->_transitionMapId = MAP_INVALID;
