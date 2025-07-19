@@ -58,3 +58,4 @@ struct MapStats {
 };
 
 extern MapStats *pMapStats;
+extern const char *location_type[];
