@@ -8,6 +8,7 @@
 #include "Engine/Tables/NPCTable.h"
 #include "Engine/Tables/HouseTable.h"
 #include "Engine/GameResourceManager.h"
+#include "Engine/Graphics/Outdoor.h"
 
 using namespace std;
 
@@ -141,6 +142,7 @@ void compileLLMContext() {
         set<MapId> dungeonIds;
         for (auto [evtId, ir] : dungeonEventMap) {
             if (ir.data.move_map_descr.house_id != HOUSE_INVALID || ir.data.move_map_descr.exit_pic_id) {
+                // Case for GUIWindow_IndoorEntryExit
                 MapId mid = pMapStats->GetMapInfo(ir.str);
                 if (mid != MAP_INVALID) dungeonIds.insert(mid);
             }
@@ -170,14 +172,15 @@ void compileLLMContext() {
         // Debug output
         log_file << "*****************************************************************" << endl;
         log_file << format("MAP {} ({})", mapInfo->name, (int)i) << endl;
+        if (isMapUnderwater(i)) log_file << "UNDERWATER MAP!" << endl;
         log_file << "Type: " << (isMapIndoor(i) ? "indoor" : "outdoor") << endl;
-        log_file << "Env: " << location_type[mapInfo->uEAXEnv] << endl;
+        log_file << "Env type: " << location_type[mapInfo->uEAXEnv] << endl;
         log_file << "Difficulty: " << (int)mapInfo->mapTreasureLevel << endl;
         
         // TODO Apparently, the NPCs do not have professions set at this point, they are all "No profession".
         log_file << none_if_empty("NPCs who live on this map", housedNPCs.empty()) << endl;
         for (auto x : housedNPCs) {
-            log_file << format("NPC {} ({}), profession {}, lives in house {} ({})", x.NPC.name, x.npcId, NPCProfessionNames.at(x.NPC.profession), x.house.name, (int)x.NPC.Location2D) << endl;
+            log_file << format("NPC {} ({}), lives in house {} ({})", x.NPC.name, x.npcId, x.house.name, (int)x.NPC.Location2D) << endl;
         }
 
         log_file << none_if_empty("Houses and shops on this map", houseTypes.empty()) << endl;
@@ -190,6 +193,21 @@ void compileLLMContext() {
         for (auto x : dungeonIds) {
             auto dungeonInfo = &pMapStats->pInfos[x];
             log_file << format("{} ({})", dungeonInfo->name, (int)x) << endl;
+        }
+
+        vector<string> walkTargets;
+        vector<string> directionNames = {"North", "South", "East", "West"};
+        if (footTravelDestinations.indices().contains(i)) {
+            for (auto direction : {0,1,2,3}) {
+                MapId test = footTravelDestinations[i][direction];
+                if (test != MAP_INVALID && pMapStats->pInfos.indices().contains(test)) {
+                    walkTargets.push_back(format("{}: {} ({})", directionNames[direction], pMapStats->pInfos[test].name, (int)test));
+                }
+            }
+        }
+        log_file << none_if_empty("Maps reachable by walking to edge", walkTargets.empty()) << endl;
+        for (auto x : walkTargets) {
+            log_file << x << endl;
         }
     }
 }

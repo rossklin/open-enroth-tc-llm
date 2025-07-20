@@ -65,7 +65,7 @@ ODMRenderParams *pODMRenderParams = nullptr;
 
 SkyBillboardStruct SkyBillboard;  // skybox planes
 
-static constexpr IndexedArray<std::array<MapId, 4>, MAP_EMERALD_ISLAND, MAP_SHOALS> footTravelDestinations = {
+const IndexedArray<std::array<MapId, 4>, MAP_EMERALD_ISLAND, MAP_SHOALS> footTravelDestinations = {
     // from                      north                south                east                 west
     {MAP_EMERALD_ISLAND,        {MAP_INVALID,         MAP_INVALID,         MAP_INVALID,         MAP_INVALID}},
     {MAP_HARMONDALE,            {MAP_TULAREAN_FOREST, MAP_BARROW_DOWNS,    MAP_TULAREAN_FOREST, MAP_ERATHIA}},

@@ -10,6 +10,8 @@
 
 #include "Library/Color/Color.h"
 
+#include "Utility/IndexedArray.h"
+
 #include "BSPModel.h"
 #include "LocationInfo.h"
 #include "LocationTime.h"
@@ -123,3 +125,4 @@ void sub_481ED9_MessWithODMRenderParams();
 void TeleportToStartingPoint(MapStartPoint point);  // idb
 
 extern MapStartPoint uLevel_StartingPointType;
+extern const IndexedArray<std::array<MapId, 4>, MAP_EMERALD_ISLAND, MAP_SHOALS> footTravelDestinations;
