@@ -127,6 +127,7 @@ macro(resolve_dependencies) # Intentionally a macro - we want set() to work in p
         find_package(OpenAL CONFIG REQUIRED)
 
         find_package(PNG REQUIRED)
+        find_package(CURL REQUIRED)
     endif()
 
     # On Android we somehow get OpenGL available by default, despite it not being findable by find_package. So we
