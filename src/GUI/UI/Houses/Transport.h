@@ -30,3 +30,15 @@ class GUIWindow_Transport : public GUIWindow_House {
 };
 
 bool isTravelAvailable(HouseId houseId);
+
+struct TransportInfo {
+    MapId uMapInfoID;
+    std::array<unsigned char, 7> pSchedule;
+    int uTravelTime; // In days.
+    Vec3f arrivalPos;
+    int arrival_view_yaw;
+    QuestBit uQuestBit;  // quest bit required to set for this travel option to be enabled; otherwise 0
+};
+
+extern const std::array<TransportInfo, 35> transportSchedule;
+extern const IndexedArray<std::array<int, 4>, HOUSE_FIRST_TRANSPORT, HOUSE_LAST_TRANSPORT> transportRoutes;

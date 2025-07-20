@@ -10,13 +10,9 @@
 #include "Engine/GameResourceManager.h"
 #include "Engine/Graphics/Outdoor.h"
 
-using namespace std;
+#include "GUI/UI/Houses/Transport.h"
 
-struct HousedNPC {
-    unsigned int npcId;
-    HouseData house;
-    NPCData NPC;
-};
+using namespace std;
 
 const std::map<HouseType, std::string> houseTypeNames = {
     { HouseType::HOUSE_TYPE_INVALID, "Invalid" },
@@ -158,11 +154,26 @@ void compileLLMContext() {
             houseTypes.insert(houseTable[ir.data.house_id].uType);
         }
 
-        vector<HousedNPC> housedNPCs;
+        set<int> housedNPCs;
         for (unsigned int i = 0; i < pNPCStats->uNumNewNPCs; ++i) {
             NPCData *npc = &pNPCStats->pNPCData[i];
             if (npc->Location2D != HOUSE_INVALID && houseIds.contains(npc->Location2D)) {
-                housedNPCs.push_back({i, houseTable[npc->Location2D], *npc});
+                housedNPCs.insert(i);
+            }
+        }
+
+        // Loop through transport houses to find transport routes
+        map<HouseType, set<MapId>> routes;
+        for (auto hid : houseIds) {
+            if (transportRoutes.indices().contains(hid)) {
+                for (int schedule_id : transportRoutes[hid]) {
+                    if (schedule_id < transportSchedule.size()) {
+                        const MapId destination = transportSchedule[schedule_id].uMapInfoID;
+                        if (destination != MAP_INVALID) {
+                            routes[houseTable[hid].uType].insert(destination);
+                        }
+                    }
+                }
             }
         }
 
@@ -175,18 +186,20 @@ void compileLLMContext() {
         if (isMapUnderwater(i)) log_file << "UNDERWATER MAP!" << endl;
         log_file << "Type: " << (isMapIndoor(i) ? "indoor" : "outdoor") << endl;
         log_file << "Env type: " << location_type[mapInfo->uEAXEnv] << endl;
-        log_file << "Difficulty: " << (int)mapInfo->mapTreasureLevel << endl;
+        log_file << "Difficulty: " << (int)mapInfo->mapTreasureLevel << endl << endl;
         
         // TODO Apparently, the NPCs do not have professions set at this point, they are all "No profession".
         log_file << none_if_empty("NPCs who live on this map", housedNPCs.empty()) << endl;
         for (auto x : housedNPCs) {
-            log_file << format("NPC {} ({}), lives in house {} ({})", x.NPC.name, x.npcId, x.house.name, (int)x.NPC.Location2D) << endl;
+            log_file << x << ", ";
         }
+        log_file << endl << endl;
 
         log_file << none_if_empty("Houses and shops on this map", houseTypes.empty()) << endl;
         for (auto tid : houseTypes) {
-            log_file << houseTypeNames.at(tid) << endl;
+            log_file << houseTypeNames.at(tid) << ", ";
         }
+        log_file << endl << endl;
         
         const string pathName = isMapIndoor(i) ? "Exits or sub dungeons" : "Dungeons on this map";
         log_file << none_if_empty(pathName, dungeonIds.empty()) << endl;
@@ -194,6 +207,7 @@ void compileLLMContext() {
             auto dungeonInfo = &pMapStats->pInfos[x];
             log_file << format("{} ({})", dungeonInfo->name, (int)x) << endl;
         }
+        log_file << endl;
 
         vector<string> walkTargets;
         vector<string> directionNames = {"North", "South", "East", "West"};
@@ -209,5 +223,14 @@ void compileLLMContext() {
         for (auto x : walkTargets) {
             log_file << x << endl;
         }
+        log_file << endl;
+
+        for (auto [k, dest] : routes) {
+            log_file << none_if_empty(format("Transport options by travel company ({})", houseTypeNames.at(k)), routes[k].empty()) << endl;
+            for (auto mid : dest) {
+                log_file << format("{} ({})", pMapStats->pInfos[mid].name, (int)mid) << endl;
+            }
+        }
+        log_file << endl;
     }
 }

@@ -24,17 +24,8 @@
 
 #include "Utility/IndexedArray.h"
 
-struct TransportInfo {
-    MapId uMapInfoID;
-    std::array<unsigned char, 7> pSchedule;
-    int uTravelTime; // In days.
-    Vec3f arrivalPos;
-    int arrival_view_yaw;
-    QuestBit uQuestBit;  // quest bit required to set for this travel option to be enabled; otherwise 0
-};
-
 // 004F09B0
-static constexpr std::array<TransportInfo, 35> transportSchedule = {{
+const std::array<TransportInfo, 35> transportSchedule = {{
 //    location name        schedule            days  pos                     yaw   qbit
     { MAP_ERATHIA,         {1, 0, 1, 0, 1, 0, 0}, 2, {-18048,  4636,  833},  1536, QBIT_INVALID },  // for stable
     { MAP_TULAREAN_FOREST, {0, 1, 0, 1, 0, 1, 0}, 2, {-2527,  -6773,  1153}, 896,  QBIT_INVALID },
@@ -73,7 +64,7 @@ static constexpr std::array<TransportInfo, 35> transportSchedule = {{
     { MAP_ARENA,           {0, 0, 0, 0, 0, 0, 1}, 4, { 3844,   2906,  193},  512,  QBIT_INVALID }
 }};
 
-static constexpr IndexedArray<std::array<int, 4>, HOUSE_FIRST_TRANSPORT, HOUSE_LAST_TRANSPORT> transportRoutes = {
+const IndexedArray<std::array<int, 4>, HOUSE_FIRST_TRANSPORT, HOUSE_LAST_TRANSPORT> transportRoutes = {
     {HOUSE_STABLE_HARMONDALE,       { 0, 1, 1, 34 }},
     {HOUSE_STABLE_ERATHIA,          { 2, 3, 4, 5 }},
     {HOUSE_STABLE_TULAREAN_FOREST,  { 6, 7, 8, 8 }},
