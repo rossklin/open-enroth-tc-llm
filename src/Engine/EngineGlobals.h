@@ -7,6 +7,7 @@
 
 class PlatformApplication;
 class ScriptingSystem;
+class GMState;
 
 namespace detail {
 void globalProcessMessages();
@@ -25,6 +26,7 @@ extern PlatformOpenGLContext *openGLContext;
 // TODO(captainurist): this global should go, together with this header file.
 extern PlatformApplication *application;
 extern ScriptingSystem *scriptingSystem;
+extern GMState *pGMState;
 
 #define MessageLoopWithWait() {                                                                                         \
     detail::globalProcessMessages();                                                                                    \

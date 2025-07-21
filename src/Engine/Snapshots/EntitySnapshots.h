@@ -59,6 +59,8 @@ struct SpawnPoint;
 struct SpellBuff;
 struct SpriteObject;
 class Timer;
+class GMState;
+struct ItemData;
 
 static_assert(sizeof(Vec3s) == 6);
 static_assert(sizeof(Vec3i) == 12);
@@ -1344,5 +1346,40 @@ MM_DECLARE_MEMCOPY_SERIALIZABLE(SaveGameHeader_MM7)
 void snapshot(const SaveGameHeader &src, SaveGameHeader_MM7 *dst);
 void reconstruct(const SaveGameHeader_MM7 &src, SaveGameHeader *dst);
 
+struct ItemData_MM7 {
+    std::array<char, 32> iconName;
+    std::array<char, 32> name;
+    std::array<char, 32> unidentifiedName;
+    std::array<char, 128> description;
+    int32_t baseValue;
+    int32_t spriteId;
+    int32_t paperdollAnchorOffsetX;
+    int32_t paperdollAnchorOffsetY;
+    int32_t type;
+    int32_t skill;
+    int32_t damageDice;
+    int32_t damageRoll;
+    int32_t damageMod;
+    int32_t reagentPower;
+    int32_t rarity;
+    int32_t specialEnchantment;
+    int32_t standardEnchantment;
+    int32_t standardEnchantmentStrength;
+    std::array<int32_t, 6> uChanceByTreasureLvl;
+    int32_t identifyAndRepairDifficulty;
+};
+MM_DECLARE_MEMCOPY_SERIALIZABLE(ItemData_MM7)
+
+void snapshot(const ItemData &src, ItemData_MM7 *dst);
+void reconstruct(const ItemData_MM7 &src, ItemData *dst);
+
+struct GMState_MM7 {
+    uint32_t numCustomItems;
+    std::array<ItemData_MM7, 100> customItems;
+};
+MM_DECLARE_MEMCOPY_SERIALIZABLE(GMState_MM7)
+
+void snapshot(const GMState &src, GMState_MM7 *dst);
+void reconstruct(const GMState_MM7 &src, GMState *dst);
 
 #pragma pack(pop)

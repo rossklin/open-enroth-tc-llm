@@ -13,6 +13,8 @@
 #include "Engine/EngineFileSystem.h"
 #include "Engine/Party.h"
 #include "Engine/GameResourceManager.h"
+#include "Engine/EngineGlobals.h"
+#include "LLM/GMState.h"
 
 #include "GUI/UI/UIHouses.h"
 
@@ -265,6 +267,14 @@ void ItemTable::Initialize(GameResourceManager *resourceManager) {
     Item::PopulateSpecialBonusMap();
     Item::PopulateArtifactBonusMap();
     LoadItemSizes();
+}
+
+void ItemTable::LoadCustomItems() {
+    if (pGMState) {
+        for (size_t i = 0; i < pGMState->customItems.size(); ++i) {
+            items[static_cast<ItemId>(std::to_underlying(ITEM_FIRST_DYNAMIC) + i)] = pGMState->customItems[i];
+        }
+    }
 }
 
 //----- (00453B3C) --------------------------------------------------------

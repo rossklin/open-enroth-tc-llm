@@ -20,6 +20,7 @@ struct ItemTable {
     void LoadPotions(const Blob &potions);
     void LoadPotionNotes(const Blob &potionNotes);
     void LoadItemSizes();
+    void LoadCustomItems();
 
     /**
      * @offset 0x456620

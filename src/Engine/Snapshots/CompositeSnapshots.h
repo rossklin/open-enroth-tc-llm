@@ -132,6 +132,7 @@ struct SaveGame_MM7 {
     ActiveOverlayList_MM7 overlays; // In overlay.bin.
     std::array<NPCData_MM7, 501> npcData; // in npcdata.bin.
     std::array<uint16_t, 51> npcGroups; // in npcgroup.bin.
+    GMState_MM7 gmState; // in gmstate.bin.
 };
 
 // TODO(captainurist): header here is essentially the whole savegame. Redo properly.

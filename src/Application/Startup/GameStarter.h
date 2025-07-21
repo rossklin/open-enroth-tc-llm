@@ -24,6 +24,7 @@ class GameBindings;
 class OverlaySystem;
 class ScriptingSystem;
 class EngineController;
+class GMState;
 
 class GameStarter {
  public:
@@ -63,4 +64,5 @@ class GameStarter {
     std::unique_ptr<OverlaySystem> _overlaySystem;
     std::unique_ptr<Engine> _engine;
     std::shared_ptr<Game> _game;
+    std::unique_ptr<GMState> _gmState;
 };

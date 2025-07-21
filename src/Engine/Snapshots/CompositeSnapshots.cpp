@@ -15,6 +15,7 @@
 #include "Engine/Objects/Chest.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Tables/ItemTable.h"
+#include "Engine/EngineGlobals.h"
 #include "Engine/Engine.h"
 #include "Engine/Party.h"
 #include "Engine/Tables/TileTable.h"
@@ -555,6 +556,7 @@ void snapshot(const SaveGameHeader &src, SaveGame_MM7 *dst) {
     snapshot(*pActiveOverlayList, &dst->overlays);
     snapshot(pNPCStats->pNPCData, &dst->npcData);
     snapshot(pNPCStats->pGroups, &dst->npcGroups);
+    snapshot(*pGMState, &dst->gmState);
 }
 
 void reconstruct(const SaveGame_MM7 &src, SaveGameHeader *dst) {
@@ -564,6 +566,7 @@ void reconstruct(const SaveGame_MM7 &src, SaveGameHeader *dst) {
     reconstruct(src.overlays, pActiveOverlayList);
     reconstruct(src.npcData, &pNPCStats->pNPCData);
     reconstruct(src.npcGroups, &pNPCStats->pGroups);
+    reconstruct(src.gmState, pGMState);
 }
 
 void serialize(const SaveGame_MM7 &src, LodWriter *dst) {
@@ -573,6 +576,7 @@ void serialize(const SaveGame_MM7 &src, LodWriter *dst) {
     dst->write("overlay.bin", toBlob(src.overlays));
     dst->write("npcdata.bin", toBlob(src.npcData));
     dst->write("npcgroup.bin", toBlob(src.npcGroups));
+    dst->write("gmstate.bin", toBlob(src.gmState));
 }
 
 void deserialize(const LodReader &src, SaveGame_MM7 *dst) {
@@ -582,6 +586,9 @@ void deserialize(const LodReader &src, SaveGame_MM7 *dst) {
     deserialize(src.read("overlay.bin"), &dst->overlays);
     deserialize(src.read("npcdata.bin"), &dst->npcData);
     deserialize(src.read("npcgroup.bin"), &dst->npcGroups);
+    if (src.exists("gmstate.bin")) {
+        deserialize(src.read("gmstate.bin"), &dst->gmState);
+    }
 }
 
 void reconstruct(const SpriteFrameTable_MM7 &src, SpriteFrameTable *dst) {

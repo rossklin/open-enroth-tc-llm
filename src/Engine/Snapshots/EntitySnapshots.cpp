@@ -32,6 +32,7 @@
 #include "Library/Color/ColorTable.h"
 #include "Library/Logger/Logger.h"
 #include "Library/Snapshots/CommonSnapshots.h"
+#include "LLM/GMState.h"
 
 #include "Utility/Memory/MemSet.h"
 #include "Utility/String/Ascii.h"
@@ -1932,3 +1933,71 @@ void reconstruct(const SaveGameHeader_MM7 &src, SaveGameHeader *dst) {
     reconstruct(src.playingTime, &dst->playingTime);
     // field_30 is ignored.
 }
+
+void snapshot(const ItemData &src, ItemData_MM7 *dst) {
+    memzero(dst);
+
+    snapshot(src.iconName, &dst->iconName);
+    snapshot(src.name, &dst->name);
+    snapshot(src.unidentifiedName, &dst->unidentifiedName);
+    snapshot(src.description, &dst->description);
+    dst->baseValue = src.baseValue;
+    dst->spriteId = std::to_underlying(src.spriteId);
+    dst->paperdollAnchorOffsetX = src.paperdollAnchorOffset.x;
+    dst->paperdollAnchorOffsetY = src.paperdollAnchorOffset.y;
+    dst->type = std::to_underlying(src.type);
+    dst->skill = std::to_underlying(src.skill);
+    dst->damageDice = src.damageDice;
+    dst->damageRoll = src.damageRoll;
+    dst->damageMod = src.damageMod;
+    dst->reagentPower = src.reagentPower;
+    dst->rarity = std::to_underlying(src.rarity);
+    dst->specialEnchantment = std::to_underlying(src.specialEnchantment);
+    dst->standardEnchantment = src.standardEnchantment ? std::to_underlying(*src.standardEnchantment) : -1;
+    dst->standardEnchantmentStrength = src.standardEnchantmentStrength;
+    snapshot(src.uChanceByTreasureLvl, &dst->uChanceByTreasureLvl);
+    dst->identifyAndRepairDifficulty = src.identifyAndRepairDifficulty;
+}
+
+void reconstruct(const ItemData_MM7 &src, ItemData *dst) {
+    reconstruct(src.iconName, &dst->iconName);
+    reconstruct(src.name, &dst->name);
+    reconstruct(src.unidentifiedName, &dst->unidentifiedName);
+    reconstruct(src.description, &dst->description);
+    dst->baseValue = src.baseValue;
+    dst->spriteId = static_cast<SpriteId>(src.spriteId);
+    dst->paperdollAnchorOffset.x = src.paperdollAnchorOffsetX;
+    dst->paperdollAnchorOffset.y = src.paperdollAnchorOffsetY;
+    dst->type = static_cast<ItemType>(src.type);
+    dst->skill = static_cast<CharacterSkillType>(src.skill);
+    dst->damageDice = src.damageDice;
+    dst->damageRoll = src.damageRoll;
+    dst->damageMod = src.damageMod;
+    dst->reagentPower = src.reagentPower;
+    dst->rarity = static_cast<ItemRarity>(src.rarity);
+    dst->specialEnchantment = static_cast<ItemEnchantment>(src.specialEnchantment);
+    if (src.standardEnchantment != -1) {
+        dst->standardEnchantment = static_cast<CharacterAttribute>(src.standardEnchantment);
+    } else {
+        dst->standardEnchantment = {};
+    }
+    dst->standardEnchantmentStrength = src.standardEnchantmentStrength;
+    reconstruct(src.uChanceByTreasureLvl, &dst->uChanceByTreasureLvl);
+    dst->identifyAndRepairDifficulty = src.identifyAndRepairDifficulty;
+}
+
+void snapshot(const GMState &src, GMState_MM7 *dst) {
+    memzero(dst);
+    dst->numCustomItems = src.customItems.size();
+    for (size_t i = 0; i < src.customItems.size(); ++i) {
+        snapshot(src.customItems[i], &dst->customItems[i]);
+    }
+}
+
+void reconstruct(const GMState_MM7 &src, GMState *dst) {
+    dst->customItems.resize(src.numCustomItems);
+    for (size_t i = 0; i < src.numCustomItems; ++i) {
+        reconstruct(src.customItems[i], &dst->customItems[i]);
+    }
+}
+

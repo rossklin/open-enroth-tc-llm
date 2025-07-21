@@ -40,6 +40,7 @@
 #include "Engine/Spells/CastSpellInfo.h"
 #include "Engine/Spells/SpellEnumFunctions.h"
 #include "Engine/Tables/FrameTableInc.h"
+#include "Engine/Tables/ItemTable.h"
 #include "Engine/Time/Timer.h"
 #include "Engine/TurnEngine/TurnEngine.h"
 #include "Engine/MapInfo.h"
@@ -1612,6 +1613,7 @@ void Game::gameLoop() {
     if (bLoading) {
         uGameState = GAME_STATE_PLAYING;
         LoadGame(pSavegameList->selectedSlot);
+        pItemTable->LoadCustomItems();
     }
 
     extern bool use_music_folder;

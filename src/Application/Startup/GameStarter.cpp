@@ -48,6 +48,7 @@
 #include "Scripting/PlatformBindings.h"
 #include "Scripting/RendererBindings.h"
 #include "Scripting/ScriptingSystem.h"
+#include "LLM/GMState.h"
 
 #include "Utility/Exception.h"
 
@@ -186,6 +187,9 @@ void GameStarter::initialize() {
     _scriptingSystem->addBindings<RendererBindings>("renderer");
     _scriptingSystem->executeEntryPoint();
     ::scriptingSystem = _scriptingSystem.get();
+
+    _gmState = std::make_unique<GMState>();
+    ::pGMState = _gmState.get();
 }
 
 GameStarter::~GameStarter() {
@@ -203,6 +207,7 @@ GameStarter::~GameStarter() {
     ::window = nullptr;
     ::eventHandler = nullptr;
     ::openGLContext = nullptr;
+    ::pGMState = nullptr;
 }
 
 void GameStarter::resolveUserPath(Environment *environment, GameStarterOptions *options) {

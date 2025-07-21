@@ -953,6 +953,9 @@ enum class ItemId : int32_t {
     ITEM_798 = 798,                                  // Unused.
     ITEM_799 = 799,                                  // Unused.
 
+    ITEM_FIRST_DYNAMIC = 800,
+    ITEM_LAST_DYNAMIC = 899,
+
     // These are used in chests and are replaced with normal random-generated items in GenerateItemsInChest().
     ITEM_RANDOM_LEVEL_1 = -1,
     ITEM_RANDOM_LEVEL_2 = -2,
@@ -966,7 +969,7 @@ enum class ItemId : int32_t {
     ITEM_LAST_RANDOM = ITEM_RANDOM_LEVEL_1,
 
     ITEM_FIRST_VALID = ITEM_CRUDE_LONGSWORD,
-    ITEM_LAST_VALID = ITEM_799,
+    ITEM_LAST_VALID = ITEM_LAST_DYNAMIC,
 
     ITEM_FIRST_REGULAR = ITEM_CRUDE_LONGSWORD,
     ITEM_LAST_REGULAR = ITEM_SUN_AMULET,
